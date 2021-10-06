@@ -1,0 +1,10 @@
+- [ ] products module
+  - [ ] id, handle, title, description, created_at, product_type, status, tags
+- [ ] merchants module
+  - [ ] id, name, shop_name, email, password, country, city
+- [ ] build endpoints
+- [ ] controllers
+- [ ] services
+- [ ] validation
+- [ ] authentication
+- [ ] authorization
