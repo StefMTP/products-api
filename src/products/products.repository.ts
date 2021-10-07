@@ -5,6 +5,7 @@ import { paramCase } from "change-case";
 import { HttpException } from "@nestjs/common";
 import { UpdateProductDto } from "./dto/update-product.dto";
 import { FilterProductDto } from "./dto/filter-products.dto";
+import { User } from "src/auth/user.entity";
 
 @EntityRepository(Product)
 export class ProductsRepository extends Repository<Product> {
@@ -25,7 +26,7 @@ export class ProductsRepository extends Repository<Product> {
         return products;
     }
 
-    async createProduct(createProductDto: CreateProductDto): Promise<Product> {
+    async createProduct(createProductDto: CreateProductDto, user: User): Promise<Product> {
         const { title, description, status } = createProductDto;
 
         const productFound = await this.findOne({ title });
@@ -34,7 +35,7 @@ export class ProductsRepository extends Repository<Product> {
             throw new HttpException('Product with such title already exists.', 400);
         }
 
-        const product = this.create({title, description, status, handle: paramCase(title)});
+        const product = this.create({title, description, status, handle: paramCase(title), user});
         await this.save(product);
 
         return product;

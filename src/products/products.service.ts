@@ -8,6 +8,7 @@ import { FilterProductDto } from './dto/filter-products.dto';
 import { ProductsRepository } from './products.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './product.entity';
+import { User } from 'src/auth/user.entity';
 
 @Injectable()
 export class ProductsService {
@@ -29,8 +30,8 @@ export class ProductsService {
         return product;
     }
 
-    async createProduct(createProductDto: CreateProductDto): Promise<Product> {
-        return await this.productsRepository.createProduct(createProductDto);
+    async createProduct(createProductDto: CreateProductDto, user: User): Promise<Product> {
+        return await this.productsRepository.createProduct(createProductDto, user);
     }
     
     
@@ -40,7 +41,7 @@ export class ProductsService {
         
         product.title = title;
         product.description = description;
-        product.product_type = product_type;
+        product.productType = product_type;
         product.status = status;
 
         this.productsRepository.save(product);

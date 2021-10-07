@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/auth/user.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { productStatus } from "./product-status.enum";
 
 @Entity({ name: 'products' })
@@ -16,10 +17,10 @@ export class Product {
     handle: string;
 
     @CreateDateColumn()
-    created_at: Date;
+    createdAt: Date;
 
     @Column({ nullable: true })
-    product_type: string;
+    productType: string;
 
     @Column({
         type: 'enum',
@@ -30,4 +31,7 @@ export class Product {
 
     @Column({ nullable: true })
     tags: string;
+
+    @ManyToOne(_type => User, user => user.products, {eager: false})
+    user: User
 }

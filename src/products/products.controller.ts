@@ -1,4 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/get-user.decorator';
+import { User } from 'src/auth/user.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FilterProductDto } from './dto/filter-products.dto';
 import { UpdateProductStatusDto } from './dto/update-product-status.dto';
@@ -8,6 +11,7 @@ import { Product } from './product.entity';
 import { ProductsService } from './products.service';
 
 @Controller('products')
+@UseGuards(AuthGuard())
 export class ProductsController {
     constructor(private productsService: ProductsService) {}
 
@@ -22,8 +26,8 @@ export class ProductsController {
     }
 
     @Post()
-    async createProduct(@Body() createProductDto: CreateProductDto): Promise<Product> {
-        return await this.productsService.createProduct(createProductDto);
+    async createProduct(@Body() createProductDto: CreateProductDto, @GetUser() user: User): Promise<Product> {
+        return await this.productsService.createProduct(createProductDto, user);
     }
 
     @Put(':id')
