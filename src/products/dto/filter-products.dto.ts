@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, IsString } from "class-validator";
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
 import { productStatus } from "../product-status.enum";
 
 export class FilterProductDto {
@@ -7,6 +7,7 @@ export class FilterProductDto {
     status?: productStatus;
 
     @IsString()
+    @IsNotEmpty({message: 'The search parameter is empty'})
     @IsOptional()
     search?: string;
 }

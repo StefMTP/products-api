@@ -18,11 +18,7 @@ export class ProductsController {
 
     @Get()
     async getProducts(@Query() filterProductDto: FilterProductDto): Promise<Product[]> {
-        if(Object.keys(filterProductDto).length) {
-            return await this.productsService.getFilteredProducts(filterProductDto);
-        }
-
-        return await this.productsService.getAllProducts();
+        return await this.productsService.getProducts(filterProductDto);
     }
 
     @Post()

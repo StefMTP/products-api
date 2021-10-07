@@ -14,22 +14,8 @@ export class ProductsService {
 
     constructor(@InjectRepository(ProductsRepository) private productsRepository: ProductsRepository) {}
 
-    async getAllProducts(): Promise<Product[]> {
-        return await this.productsRepository.find();
-    }
-
-    async getFilteredProducts(filterProductDto: FilterProductDto): Promise<Product[]> {
-        const { status, search } = filterProductDto;
-        let products = await this.getAllProducts();
-
-        if (status) {
-            products = products.filter(product => product.status === status);
-        }
-        if (search) {
-            products = products.filter(product => product.title.toLowerCase().includes(search) || product.description.toLowerCase().includes(search));
-        }
-
-        return products;
+    async getProducts(filterProductDto: FilterProductDto): Promise<Product[]> {
+        return await this.productsRepository.getProducts(filterProductDto);
     }
     
 
