@@ -1,9 +1,0 @@
-{
-    "type": "mysql",
-    "host": "localhost",
-    "port": "3306",
-    "username": "root",
-    "password": "mutiny01123581321",
-    "database": "nest_products",
-    "synchronize": "true"
-}

@@ -9,39 +9,45 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import {  } from './product-status.enum';
 import { Product } from './product.entity';
 import { ProductsService } from './products.service';
+import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('products')
 @UseGuards(AuthGuard())
 export class ProductsController {
-    constructor(private productsService: ProductsService) {}
+    private logger = new Logger('ProductsController');
 
-    @Get(':id')
-    async getProductById(@Param('id') id: string): Promise<Product> {
-        return await this.productsService.getProductById(id);
+    constructor(private productsService: ProductsService, private configService: ConfigService) {}
+    
+    @Get()
+    async getProducts(@Query() filterProductDto: FilterProductDto, @GetUser() user: User): Promise<Product[]> {
+        this.logger.verbose(`User ${user.username} is fetching products with filters: ${JSON.stringify(filterProductDto)}`);
+        return await this.productsService.getProducts(filterProductDto, user);
     }
 
-    @Get()
-    async getProducts(@Query() filterProductDto: FilterProductDto): Promise<Product[]> {
-        return await this.productsService.getProducts(filterProductDto);
+    @Get(':id')
+    async getProductById(@Param('id') id: string, @GetUser() user: User): Promise<Product> {
+        return await this.productsService.getProductById(id, user);
     }
 
     @Post()
     async createProduct(@Body() createProductDto: CreateProductDto, @GetUser() user: User): Promise<Product> {
+        this.logger.verbose(`User ${user.username} is creating a new product with data: ${JSON.stringify(createProductDto)}`)
         return await this.productsService.createProduct(createProductDto, user);
     }
 
     @Put(':id')
-    async editProduct(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto): Promise<Product> {
-        return await this.productsService.editProduct(id, updateProductDto);
+    async editProduct(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto, @GetUser() user: User): Promise<Product> {
+        return await this.productsService.editProduct(id, updateProductDto, user);
     }
 
     @Patch(':id/status')
-    async editProductStatus(@Param('id') id: string, @Body() updateProductStatusDto: UpdateProductStatusDto): Promise<Product> {
-        return await this.productsService.editProductStatus(id, updateProductStatusDto);
+    async editProductStatus(@Param('id') id: string, @Body() updateProductStatusDto: UpdateProductStatusDto, @GetUser() user: User): Promise<Product> {
+        return await this.productsService.editProductStatus(id, updateProductStatusDto, user);
     }
 
     @Delete(':id')
-    async removeProduct(@Param('id') id: string): Promise<void> {
-        return await this.productsService.removeProduct(id);
+    async removeProduct(@Param('id') id: string, @GetUser() user: User): Promise<void> {
+        return await this.productsService.removeProduct(id, user);
     }
 }

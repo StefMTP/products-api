@@ -21,7 +21,5 @@ export class AuthCredentialsDto {
 
     @IsString()
     @IsNotEmpty()
-    @MinLength(8)
-    @MaxLength(16)
     password_confirmation: string
 }

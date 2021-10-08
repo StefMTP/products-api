@@ -4,6 +4,11 @@
 
 # Environmental variables
 .env
+.env.stage.development
+.env.stage.production
+
+# Configuration
+ormconfig.json
 
 # Logs
 logs

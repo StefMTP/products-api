@@ -15,13 +15,13 @@ export class ProductsService {
 
     constructor(@InjectRepository(ProductsRepository) private productsRepository: ProductsRepository) {}
 
-    async getProducts(filterProductDto: FilterProductDto): Promise<Product[]> {
-        return await this.productsRepository.getProducts(filterProductDto);
+    async getProducts(filterProductDto: FilterProductDto, user: User): Promise<Product[]> {
+        return await this.productsRepository.getProducts(filterProductDto, user);
     }
     
 
-    async getProductById(id: string): Promise<Product> {
-        const product = await this.productsRepository.findOne(id);
+    async getProductById(id: string, user: User): Promise<Product> {
+        const product = await this.productsRepository.findOne({where: {user, id}});
 
         if(!product) {
             throw new NotFoundException("There is no product with such id");
@@ -35,9 +35,9 @@ export class ProductsService {
     }
     
     
-    async editProduct(id: string, updateProductDto: UpdateProductDto): Promise<Product> {
+    async editProduct(id: string, updateProductDto: UpdateProductDto, user: User): Promise<Product> {
         const { title, description, product_type, status } = updateProductDto;
-        const product = await this.getProductById(id);
+        const product = await this.getProductById(id, user);
         
         product.title = title;
         product.description = description;
@@ -49,16 +49,16 @@ export class ProductsService {
         return product;
     }
 
-    async removeProduct(id: string): Promise<void> {
-        const result = await this.productsRepository.delete(id);
+    async removeProduct(id: string, user: User): Promise<void> {
+        const result = await this.productsRepository.delete({ id, user });
         if(result.affected === 0) {
             throw new NotFoundException('Product with such id does not exist.');
         }
     }
 
-    async editProductStatus(id: string, updateProductStatusDto: UpdateProductStatusDto): Promise<Product> {
+    async editProductStatus(id: string, updateProductStatusDto: UpdateProductStatusDto, user: User): Promise<Product> {
         const { status } = updateProductStatusDto;
-        const product: Product = await this.getProductById(id);
+        const product: Product = await this.getProductById(id, user);
 
         product.status = status;
 

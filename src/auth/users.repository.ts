@@ -11,7 +11,7 @@ export class UsersRepository extends Repository<User>{
             const { username, password, password_confirmation, email } = authCredentialsDto;
 
             if(password !== password_confirmation) {
-                throw new BadRequestException('Password confirmation does not match the original input.');
+                throw new Error('119');
             }
 
             const passwordHash = await bcrypt.hash(password, 12);
@@ -23,7 +23,11 @@ export class UsersRepository extends Repository<User>{
         } catch (err) {
             if(err.code === 'ER_DUP_ENTRY') {
                 throw new ConflictException('A user is already registered with this email.');
-            } else {
+            }
+            else if (err.message === '119') {
+                throw new BadRequestException('Password confirmation does not match the password.')
+            }
+            else {
                 throw new InternalServerErrorException();
             }
         }
