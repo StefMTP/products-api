@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductsModule } from './products/products.module';
 import { AuthModule } from './auth/auth.module';
@@ -8,7 +7,7 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     ProductsModule,
     TypeOrmModule.forRoot({
-        type: 'postgres',
+        type: "postgres",
         host: process.env.POSTGRES_HOST,
         port: +process.env.POSTGRES_PORT,
         username: process.env.POSTGRES_USERNAME,
