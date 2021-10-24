@@ -17,10 +17,6 @@ import { AuthModule } from './auth/auth.module';
         autoLoadEntities: true,
         synchronize: true,
     }),
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: [`.env.stage.${process.env.NODE_ENV}`]
-    }),
     AuthModule
   ],
 })
