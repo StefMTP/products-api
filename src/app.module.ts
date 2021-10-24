@@ -15,7 +15,9 @@ import { AuthModule } from './auth/auth.module';
         database: process.env.POSTGRES_DATABASE,
         autoLoadEntities: true,
         synchronize: true,
-        ssl: true
+        ssl: {
+          rejectUnauthorized: false
+        }
     }),
     AuthModule
   ],
