@@ -1,6 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { productStatus } from './product-status.enum';
-import { paramCase } from 'change-case';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { UpdateProductStatusDto } from './dto/update-product-status.dto';
@@ -9,6 +7,7 @@ import { ProductsRepository } from './products.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './product.entity';
 import { User } from 'src/auth/user.entity';
+import { UpdateProductTagsDto } from './dto/update-product-tags.dto';
 
 @Injectable()
 export class ProductsService {
@@ -44,7 +43,7 @@ export class ProductsService {
         product.productType = product_type;
         product.status = status;
 
-        this.productsRepository.save(product);
+        await this.productsRepository.save(product);
         
         return product;
     }
@@ -59,11 +58,32 @@ export class ProductsService {
     async editProductStatus(id: string, updateProductStatusDto: UpdateProductStatusDto, user: User): Promise<Product> {
         const { status } = updateProductStatusDto;
         const product: Product = await this.getProductById(id, user);
-
+        
         product.status = status;
-
-        this.productsRepository.save(product);
-
+        
+        await this.productsRepository.save(product);
+        
         return product;
+    }
+    
+    async addProductTag(id: string, updateProductTagsDto: UpdateProductTagsDto, user: User): Promise<Product> {
+        const { tag } = updateProductTagsDto;
+        const product: Product = await this.getProductById(id, user);
+
+        if(!product.tags) {
+            product.tags = `${tag};`;
+        } else {
+            if((product.tags.length + tag.length) > 255) {
+                throw new ConflictException("Tags exceed the max length with the new tag");
+            }
+            product.tags += `${tag};`;
+        }
+
+        await this.productsRepository.save(product);
+        return product;
+    }
+
+    async createRandomProducts(user: User): Promise<Product[]> {
+        return await this.productsRepository.createRandomProducts(user);
     }
 }
