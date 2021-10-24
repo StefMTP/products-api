@@ -8,7 +8,7 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     ProductsModule,
     TypeOrmModule.forRoot({
-        type: 'mysql',
+        type: 'postgres',
         host: process.env.POSTGRES_HOST,
         port: +process.env.POSTGRES_PORT,
         username: process.env.POSTGRES_USERNAME,
