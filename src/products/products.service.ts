@@ -83,6 +83,22 @@ export class ProductsService {
         return product;
     }
 
+    async removeProductTag(id: string, updateProductTagsDto: UpdateProductTagsDto, user: User): Promise<void> {
+        const { tag } = updateProductTagsDto;
+        const product = await this.getProductById(id, user);
+
+        const productTags = product.tags.split(';');
+
+        if(!productTags.includes(tag)) {
+            throw new ConflictException("Couldn't find the tag in this product's tags.");
+        }
+
+        product.tags = productTags.filter(el => el !== tag).join(';');
+
+        await this.productsRepository.save(product);
+
+    }
+
     async createRandomProducts(user: User): Promise<Product[]> {
         return await this.productsRepository.createRandomProducts(user);
     }

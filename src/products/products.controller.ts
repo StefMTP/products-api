@@ -59,6 +59,11 @@ export class ProductsController {
         return await this.productsService.addProductTag(id, updateProductTagsDto, user);
     }
 
+    @Patch(':id/removeTag')
+    async removeProductTag(@Param('id') id: string, @Body() updateProductTagsDto: UpdateProductTagsDto, @GetUser() user: User): Promise<void> {
+        return await this.productsService.removeProductTag(id, updateProductTagsDto, user);
+    }
+
     @Delete(':id')
     async removeProduct(@Param('id') id: string, @GetUser() user: User): Promise<void> {
         return await this.productsService.removeProduct(id, user);
