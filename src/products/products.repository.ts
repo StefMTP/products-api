@@ -6,6 +6,10 @@ import { HttpException, InternalServerErrorException, Logger } from "@nestjs/com
 import { UpdateProductDto } from "./dto/update-product.dto";
 import { FilterProductDto } from "./dto/filter-products.dto";
 import { User } from "src/auth/user.entity";
+import { v4 as uuid } from "uuid";
+import { productStatus } from "./product-status.enum";
+
+const faker = require('faker');
 
 @EntityRepository(Product)
 export class ProductsRepository extends Repository<Product> {
@@ -47,5 +51,23 @@ export class ProductsRepository extends Repository<Product> {
         await this.save(product);
 
         return product;
+    }
+
+    async createRandomProducts(user: User): Promise<Product[]> {
+        let fooProducts: Partial<Product>[] = [];
+        for (let i = 0; i < 20; i++) {
+            const fooTitle = faker.commerce.productName();
+            fooProducts.push({
+                id: uuid(),
+                title: fooTitle,
+                description: faker.commerce.productDescription(),
+                handle: paramCase(fooTitle),
+                status: faker.helpers.randomize(Object.values(productStatus)),
+                user
+            });
+        }
+        const products = await this.save(fooProducts);
+        
+        return products;
     }
 }

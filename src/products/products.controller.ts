@@ -11,7 +11,10 @@ import { Product } from './product.entity';
 import { ProductsService } from './products.service';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { UpdateProductTagsDto } from './dto/update-product-tags.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('products')
 @UseGuards(AuthGuard())
 export class ProductsController {
@@ -36,6 +39,12 @@ export class ProductsController {
         return await this.productsService.createProduct(createProductDto, user);
     }
 
+    @Post('factory')
+    async createRandomProducts(@GetUser() user: User): Promise<Product[]> {
+        this.logger.verbose(`Running product factories for user ${user.username}...`);
+        return await this.productsService.createRandomProducts(user);
+    }
+
     @Put(':id')
     async editProduct(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto, @GetUser() user: User): Promise<Product> {
         return await this.productsService.editProduct(id, updateProductDto, user);
@@ -44,6 +53,11 @@ export class ProductsController {
     @Patch(':id/status')
     async editProductStatus(@Param('id') id: string, @Body() updateProductStatusDto: UpdateProductStatusDto, @GetUser() user: User): Promise<Product> {
         return await this.productsService.editProductStatus(id, updateProductStatusDto, user);
+    }
+
+    @Patch(':id/addTag')
+    async addProductTag(@Param('id') id: string, @Body() updateProductTagsDto: UpdateProductTagsDto, @GetUser() user: User): Promise<Product> {
+        return await this.productsService.addProductTag(id, updateProductTagsDto, user);
     }
 
     @Delete(':id')
