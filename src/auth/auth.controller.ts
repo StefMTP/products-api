@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { LogInDto } from './dto/log-in.dto';
@@ -19,6 +20,7 @@ export class AuthController {
         return await this.authService.login(logInDto);
     }
 
+    @ApiBearerAuth()
     @Post('/protected')
     @UseGuards(AuthGuard())
     protected(@Req() req) {
