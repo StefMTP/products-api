@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, HttpException, InternalServerErrorException } from "@nestjs/common";
+import { BadRequestException, ConflictException, InternalServerErrorException } from "@nestjs/common";
 import { EntityRepository, Repository } from "typeorm";
 import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
 import { User } from "./user.entity";

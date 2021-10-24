@@ -6,7 +6,6 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { FilterProductDto } from './dto/filter-products.dto';
 import { UpdateProductStatusDto } from './dto/update-product-status.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import {  } from './product-status.enum';
 import { Product } from './product.entity';
 import { ProductsService } from './products.service';
 import { Logger } from '@nestjs/common';

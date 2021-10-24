@@ -3,7 +3,6 @@ import { CreateProductDto } from "./dto/create-product.dto";
 import { Product } from "./product.entity";
 import { paramCase } from "change-case";
 import { HttpException, InternalServerErrorException, Logger } from "@nestjs/common";
-import { UpdateProductDto } from "./dto/update-product.dto";
 import { FilterProductDto } from "./dto/filter-products.dto";
 import { User } from "src/auth/user.entity";
 import { v4 as uuid } from "uuid";
